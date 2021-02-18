@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player : MonoBehaviour
+public class Player : UI
 {
     public CharacterController controller;
     public float speed = 100f;
@@ -28,11 +28,13 @@ public class Player : MonoBehaviour
     public void TakeDamage(float amount)
     {
         health -= amount;
+        UpdateHp(health);
         if (health <= 0f)
         {
             Die();
         }
         Debug.Log("Player has " + health + " hp");
+
     }
 
     private void Die()

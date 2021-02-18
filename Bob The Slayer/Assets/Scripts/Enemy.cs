@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
-public class Enemy : MonoBehaviour
+public class Enemy : UI
 {
 
     public float health = 50f;
@@ -14,10 +14,11 @@ public class Enemy : MonoBehaviour
 
     public Transform player;
 
-
     public LayerMask whatIsGround, whatIsPlayer;
 
     private State state = State.Patrolling;
+
+    public Canvas canvas;
 
     enum State
     {
@@ -46,6 +47,9 @@ public class Enemy : MonoBehaviour
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         Debug.Log(agent.name+ " has spawned");
+        int enemyCount = FindObjectsOfType<Enemy>().Length ;
+        UpdateEnemiesRemainingText(enemyCount);
+       
     }
     private void Update()
     {
@@ -147,13 +151,16 @@ public class Enemy : MonoBehaviour
     {
         Destroy(gameObject);
         Debug.Log(agent.gameObject.name + "has died");
-        Debug.Log(FindObjectsOfType<Enemy>().Length-1 + " enemies are left");
-        if(FindObjectsOfType<Enemy>().Length == 1)
+
+        int enemyCount = FindObjectsOfType<Enemy>().Length - 1;
+        Debug.Log(enemyCount + " enemies are left");
+        if (enemyCount == 1)
         {
             SceneManager.LoadScene("Victory");
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        UpdateEnemiesRemainingText(enemyCount);
     }
     private void OnDrawGizmosSelected()
     {
